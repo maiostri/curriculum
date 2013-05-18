@@ -1,0 +1,317 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%% Simple LaTeX CV Template %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% NOTE: If you find that it says                                     %%
+%%                                                                    %%
+%%                           1 of ??                                  %%
+%%                                                                    %%
+%% at the bottom of your first page, this means that the AUX file     %%
+%% was not available when you ran LaTeX on this source. Simply RERUN  %%
+%% LaTeX to get the ``??'' replaced with the number of the last page  %%
+%% of the document. The AUX file will be generated on the first run   %%
+%% of LaTeX and used on the second run to fill in all of the          %%
+%% references.                                                        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Don't like 10pt? Try 11pt or 12pt
+\documentclass[10pt]{article}
+
+% This is a helpful package that puts math inside length specifications
+\usepackage{calc}
+
+%lingua e tal
+\usepackage[brazil]{babel}
+\usepackage[latin1]{inputenc}
+
+
+% Simpler bibsection for CV sections
+% (thanks to natbib for inspiration)
+\makeatletter
+\newlength{\bibhang}
+\setlength{\bibhang}{1em}
+\newlength{\bibsep}
+ {\@listi \global\bibsep\itemsep \global\advance\bibsep by\parsep}
+\newenvironment{bibsection}
+    {\minipage[t]{\linewidth}\list{}{%
+        \setlength{\leftmargin}{\bibhang}%
+        \setlength{\itemindent}{-\leftmargin}%
+        \setlength{\itemsep}{\bibsep}%
+        \setlength{\parsep}{\z@}%
+        }}
+    {\endlist\endminipage}
+\makeatother
+
+% Layout: Puts the section titles on left side of page
+\reversemarginpar
+
+\usepackage[paper=letterpaper,
+            %includefoot, % Uncomment to put page number above margin
+            marginparwidth=1.2in,     % Length of section titles
+            marginparsep=.05in,       % Space between titles and text
+            margin=1in,               % 1 inch margins
+            includemp]{geometry}
+
+%% Use these lines for A4-sized paper
+%\usepackage[paper=a4paper,
+%            %includefoot, % Uncomment to put page number above margin
+%            marginparwidth=30.5mm,    % Length of section titles
+%            marginparsep=1.5mm,       % Space between titles and text
+%            margin=25mm,              % 25mm margins
+%            includemp]{geometry}
+
+%% More layout: Get rid of indenting throughout entire document
+\setlength{\parindent}{0in}
+
+%% This gives us fun enumeration environments. compactitem will be nice.
+\usepackage{paralist}
+
+%% Reference the last page in the page number
+%
+% NOTE: comment the +LP line and uncomment the -LP line to have page
+%       numbers without the ``of ##'' last page reference)
+%
+% NOTE: uncomment the \pagestyle{empty} line to get rid of all page
+%       numbers (make sure includefoot is commented out above)
+%
+\usepackage{fancyhdr,lastpage}
+\pagestyle{fancy}
+%\pagestyle{empty}      % Uncomment this to get rid of page numbers
+\fancyhf{}\renewcommand{\headrulewidth}{0pt}
+\fancyfootoffset{\marginparsep+\marginparwidth}
+\newlength{\footpageshift}
+\setlength{\footpageshift}
+          {0.5\textwidth+0.5\marginparsep+0.5\marginparwidth-2in}
+\lfoot{\hspace{\footpageshift}%
+       \parbox{4in}{\, \hfill %
+                    \arabic{page} de \protect\pageref*{LastPage} % +LP
+%                    \arabic{page}                               % -LP
+                    \hfill \,}}
+
+% Finally, give us PDF bookmarks
+\usepackage{color,hyperref}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.3}
+\hypersetup{colorlinks,breaklinks,
+            linkcolor=darkblue,urlcolor=darkblue,
+            anchorcolor=darkblue,citecolor=darkblue}
+
+%%%%%%%%%%%%%%%%%%%%%%%% End Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Helper Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% The title (name) with a horizontal rule under it
+%
+% Usage: \makeheading{name}
+%
+% Place at top of document. It should be the first thing.
+\newcommand{\makeheading}[1]%
+        {\hspace*{-\marginparsep minus \marginparwidth}%
+         \begin{minipage}[t]{\textwidth+\marginparwidth+\marginparsep}%
+                {\large \bfseries #1}\\[-0.15\baselineskip]%
+                 \rule{\columnwidth}{1pt}%
+         \end{minipage}}
+
+\renewcommand{\section}[2]%
+        {\pagebreak[2]\vspace{1.3\baselineskip}%
+         \phantomsection\addcontentsline{toc}{section}{#1}%
+         \hspace{0in}%
+         \marginpar{
+         \raggedright \scshape #1}#2}
+
+% An itemize-style list with lots of space between items
+\newenvironment{outerlist}[1][\enskip\textbullet]%
+        {\begin{itemize}[#1]}{\end{itemize}%
+         \vspace{-1em}}
+
+\newenvironment{compactouterlist}[1][\enskip\textbullet]%
+        {\begin{itemize} \setlength{\itemsep}{0.1em}}{\end{itemize}%
+         \vspace{-1em}}
+
+% An environment IDENTICAL to outerlist that has better pre-list spacing
+% when used as the first thing in a \section
+\newenvironment{lonelist}[1][\enskip\textbullet]%
+        {\vspace{-\baselineskip}\begin{list}{#1}{%
+        \setlength{\partopsep}{0pt}%
+        \setlength{\topsep}{0pt}}}
+        {\end{list}\vspace{-.6\baselineskip}}
+
+% An itemize-style list with little space between items
+\newenvironment{innerlist}[1][\enskip\textbullet]%
+        {\begin{compactitem}[#1]}{\end{compactitem}}
+
+% An environment IDENTICAL to innerlist that has better pre-list spacing
+% when used as the first thing in a \section
+\newenvironment{loneinnerlist}[1][\enskip\textbullet]%
+        {\vspace{-\baselineskip}\begin{compactitem}[#1]}
+        {\end{compactitem}\vspace{-.6\baselineskip}}
+
+% To add some paragraph space between lines.
+% This also tells LaTeX to preferably break a page on one of these gaps
+% if there is a needed pagebreak nearby.
+\newcommand{\blankline}{\quad\pagebreak[2]}
+
+% Uses hyperref to link DOI
+\newcommand\doilink[1]{\href{http://dx.doi.org/#1}{#1}}
+\newcommand\doi[1]{doi:\doilink{#1}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%% End Helper Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%% Begin CV Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\makeheading{Ricardo Pereira Maiostri}
+
+
+\section{Informações Pessoais e para Contato}
+%
+% NOTE: Mind where the & separators and \\ breaks are in the following
+%       table.
+%
+% ALSO: \rcollength is the width of the right column of the table
+%       (adjust it to your liking; default is 1.85in).
+%
+\newlength{\rcollength}\setlength{\rcollength}{1.85in}%
+%
+\begin{tabular}[t]{@{}p{\textwidth-\rcollength}p{\rcollength}}
+\textit{Telefone:} (19) 9198-4687 & \textit{Cidade:} Santa Bárbara Do Oeste-SP \\
+\textit{E-mail:} \href{mailto:maiostri@gmail.com}{maiostri@gmail.com} & \textit{Estado civil:} Solteiro \\
+\textit{Site:} \href{http://www.ricardomaiostri.com/}{http://ricardomaiostri.com} &  \textit{Nascimento:} 19/09/1988 \\
+\textit{github:} \href{http://github.com/maiostri}{http://github.com/maiostri} \\
+
+\end{tabular}
+
+\section{Formação}
+\href{http://www.usp.br/}{\textbf{Universidade de São Paulo}}, USP.
+
+
+\begin{outerlist}
+\item[] Bacharelado em Ciências de Computação, \hfill\textbf{Previsão de término para agosto de 2013}       
+\end{outerlist}
+
+\blankline
+
+\href{http://www.colegiopolitec.com.br/}{\textbf{Colégio Politec}},
+
+\begin{outerlist}
+\item[] Técnico em Processamento de Dados, \hfill\textbf{2004-2006}       
+\end{outerlist}
+
+\blankline
+
+\section{Experiência}
+%
+
+\href{http://www.venturus.org/}{\textbf{Venturus - Centro de inovação tecnológica}},
+Campinas - SP
+\begin{outerlist}
+
+\item[] \textit{Estágio em Desenvolvimento}%
+    \hfill \textbf{Desde Julho de 2012}
+    \begin{innerlist}
+        \item Participação no planejamento e na criação de um produto ASP(Advanced Schedule Planning) para um dos clientes do Instituto e posteriormente para o mercado. Atuação tanto no 
+        desenvolvimento back-end, utilizando Java EE e tecnologias como Restful webservices, \textit{JSON}, \textit{Hibernate/JPA}, \textit{Drools}, \textit{Jbehave} e \textit{Maven}, quanto no desenvolvimento front-end, 
+        com \textit{Javascript}, \textit{JQuery} e \textit{JQuery UI}. \\
+        \item Participação no planejamento de um dos cursos para a divisão educacional do Instituto, o Venturus Educação. O curso \textit{Desenvolvimento de jogos para plataformas móveis} aborda toda a cadeia de desenvolvimento de um jogo para plataformas Android e iOS utilizando a linguagem Lua e a API Corona. \\
+    \end{innerlist}    
+
+\end{outerlist}
+
+\href{http://www.gbdi.icmc.usp.br/}{\textbf{GBDI - Grupo de Base de Dados e Imagens - USP}},
+São Carlos - SP
+\begin{outerlist}
+
+\item[] \textit{Pesquisador - Iniciação Técnológica e Industrial - CNPQ}%
+    \hfill \textbf{Desde Julho de 2011}
+    \begin{innerlist}
+        \item Atuação na portabilidade e no planejamento e desenvolvimento de novos módulos para o framework \textit{Siren}, cujo objetivo é prover extensões para  linguagem SQL de maneira a suportar buscas por similaridade em dados complexos (imagens, áudio, dados de geoposicionamento, entre outros). 
+        O framework suporta os SGBDs \textit{Oracle} e \textit{PostgreSQL}. A portabilidade foi feita da linguagem C++ Builder para ANSI C++, com utilização das bibliotecas \textit{boost} e \textit{stl}.
+    \end{innerlist}    
+\end{outerlist}
+
+\blankline
+
+\href{http://portal.tododia.uol.com.br/}{\textbf{Jornal TodoDia}},
+Americana - SP
+\begin{outerlist}
+
+\item[] \textit{Desenvolvedor - Estágio}%
+    \hfill \textbf{Julho de 2006 até Janeiro de 2007}
+    \begin{innerlist}
+        \item Planejamento e desenvolvimento de diversos sistemas da infra-estrutura do jornal, como classificados e assinaturas. Desenvolvimento em Delphi 7, com os SGBDs MaxDB e Firebird. 
+    \end{innerlist}    
+\end{outerlist}
+
+\blankline
+
+\href{http://www.darquia.com}{\textbf{Darquia - Desenvolvedora de Software}},
+Santa Bárbara Do Oeste - SP
+\begin{outerlist}
+
+\item[] \textit{Desenvolvedor - Estágio}%
+    \hfill \textbf{Janeiro de 2006 até Junho de 2006}
+    \begin{innerlist}
+        \item Desenvolvimento de software de controle comercial para as áreas automobilística e têxtil, utilizando Delphi 7. 
+    \end{innerlist}
+    
+\end{outerlist}
+
+\blankline
+
+\section{Competências}
+%
+\textbf{Línguas}
+\begin{compactouterlist}
+\item[] Inglês avançado.
+\item[] Francês básico.
+\end{compactouterlist}
+
+\blankline
+
+\textbf{Linguagens de programação}
+\begin{compactouterlist}
+\item[] Java, Javascript, C++, C, Scala, Delphi.
+\end{compactouterlist}
+
+\blankline
+
+\textbf{Tecnologias web}
+\begin{compactouterlist}
+\item[] JQuery, JQuery UI, XHTML, CSS.
+\end{compactouterlist}
+
+
+\blankline
+
+\textbf{Plataformas móveis}
+\begin{compactouterlist}
+\item[] Android.
+\end{compactouterlist}
+
+\blankline
+
+\textbf{Banco de Dados}
+\begin{compactouterlist}
+\item[] Oracle, PostgreSQL, Firebird, MaxDB.
+\end{compactouterlist}
+
+\blankline
+
+\textbf{Sistemas Operacionais}
+\begin{compactouterlist}
+\item[] Linux, BSD, Windows.
+\end{compactouterlist}
+
+\section{Disponibilidade}
+\begin{compactouterlist}
+\item[] Disponível para 40 horas semanais e viagens.
+\end{compactouterlist}
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% End CV Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
