@@ -1,4 +1,4 @@
 curriculum
 ==========
 
-curriculum vitae
+Curriculum vitae using LaTeX. For building, use create.sh script.
